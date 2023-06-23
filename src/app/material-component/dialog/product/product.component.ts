@@ -6,6 +6,7 @@ import { ProductService } from 'src/app/services/product.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { SnackbarService } from 'src/app/snackbar.service';
 
+
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',

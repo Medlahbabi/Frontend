@@ -13,6 +13,7 @@ describe('ManageCategoryComponent', () => {
     .compileComponents();
   });
 
+
   beforeEach(() => {
     fixture = TestBed.createComponent(ManageCategoryComponent);
     component = fixture.componentInstance;

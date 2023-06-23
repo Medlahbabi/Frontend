@@ -13,6 +13,8 @@ describe('ManageProductComponent', () => {
     .compileComponents();
   });
 
+
+
   beforeEach(() => {
     fixture = TestBed.createComponent(ManageProductComponent);
     component = fixture.componentInstance;

@@ -6,6 +6,7 @@ describe('ViewBillProductsComponent', () => {
   let component: ViewBillProductsComponent;
   let fixture: ComponentFixture<ViewBillProductsComponent>;
 
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ ViewBillProductsComponent ]
