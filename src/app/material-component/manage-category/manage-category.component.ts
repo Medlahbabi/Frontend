@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { CategoryService } from 'src/app/services/category.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { SnackbarService } from 'src/app/snackbar.service';
-import { CategoryComponent } from '../dialog/view-bill-products/category/category.component';
+import { CategoryComponent } from '../dialog/category/category.component';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 @Component({
   selector: 'app-manage-category',
