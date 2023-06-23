@@ -12,4 +12,5 @@ export class BestSellerComponent implements OnInit {
   ngOnInit(): void {
   }
 
+
 }

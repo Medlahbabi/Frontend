@@ -5,6 +5,7 @@ import { FullComponent } from './layouts/full/full.component';
 import { RouteGuardService } from './services/route-guard.service';
 
 
+
 const routes: Routes = [
   {path:'',component:HomeComponent},{
     path:'restaurant',

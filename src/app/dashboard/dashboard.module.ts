@@ -16,3 +16,4 @@ import { MaterialModule } from '../shared/material-module';
   declarations: [DashboardComponent]
 })
 export class DashboardModule { }
+

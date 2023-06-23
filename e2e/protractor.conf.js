@@ -36,4 +36,3 @@ exports.config = {
     }));
   }
 };
-

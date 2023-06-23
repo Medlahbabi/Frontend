@@ -13,6 +13,7 @@ describe('BestSellerComponent', () => {
     .compileComponents();
   });
 
+
   beforeEach(() => {
     fixture = TestBed.createComponent(BestSellerComponent);
     component = fixture.componentInstance;

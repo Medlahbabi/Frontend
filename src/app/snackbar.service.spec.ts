@@ -14,3 +14,4 @@ describe('SnackbarService', () => {
     expect(service).toBeTruthy();
   });
 });
+
