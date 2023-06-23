@@ -5,8 +5,9 @@ import { Router } from '@angular/router';
 import { ProductService } from 'src/app/services/product.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
-import { ConfirmationComponent } from '../dialog/view-bill-products/confirmation/confirmation.component';
-import { ProductComponent } from '../dialog/view-bill-products/product/product.component';
+import { ConfirmationComponent } from '../dialog/confirmation/confirmation.component';
+import { ProductComponent } from '../dialog/product/product.component';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-manage-product',
@@ -21,17 +22,21 @@ export class ManageProductComponent implements OnInit {
   responseMessage:any;
 
   constructor(private productService:ProductService,
+   private ngxService:NgxUiLoaderService,
     private dialog:MatDialog,
     private SnackbarService:SnackbarService,
     private router:Router) { }
 
   ngOnInit(): void {
+    this.ngxService.start();
     this.tableData();
   }
   tableData() {
     this.productService.getProducts().subscribe((response:any)=>{
+      this.ngxService.stop();
       this.dataSource = new MatTableDataSource(response);
     },(error:any)=>{
+      this.ngxService.stop();
       console.log(error.error?.message);
       if(error.error?.message){
         this.responseMessage = error.error?.message;
@@ -85,6 +90,7 @@ export class ManageProductComponent implements OnInit {
     };
     const dialogRef = this.dialog.open(ConfirmationComponent , dialogConfog);
     const sub = dialogRef.componentInstance.onEmistStatusChange.subscribe((response)=>{
+      this.ngxService.start();
       this.deleteProduct(values.id);
       dialogRef.close();
     })
@@ -92,12 +98,13 @@ export class ManageProductComponent implements OnInit {
   }
   deleteProduct(id:any){
     this.productService.delete(id).subscribe((response:any)=>{
+     this.ngxService.stop();
       this.tableData();
       this.responseMessage = response?.message;
-      //alert("Product is Deleted");
       this.SnackbarService.openSnackBar(this.responseMessage , "success");
     },(error:any)=>{
-      console.log(error.error?.message);
+      this.ngxService.stop();
+      console.log(error);
       if(error.error?.message){
         this.responseMessage = error.error?.message;
       }else{
@@ -108,20 +115,21 @@ export class ManageProductComponent implements OnInit {
   }
 
   onChange(status:any , id:any){
+    this.ngxService.start();
     var data = {
       status:status.toString(),
       id:id
     }
     this.productService.updateStatus(data).subscribe((response:any)=>{
       this.responseMessage = response?.message;
+      this.ngxService.stop();
       this.SnackbarService.openSnackBar(this.responseMessage , "success");
     },(error:any)=>{
-      //console.log(error.error?.message);
+      this.ngxService.stop();
+      console.log(error);
       if(error.error?.message){
         this.responseMessage = error.error?.message;
       }else{
-        //alert("status is updated successfully");
-
         this.responseMessage = GlobalConstants.genericError;
       }
       this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);

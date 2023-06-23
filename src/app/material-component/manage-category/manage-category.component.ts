@@ -1,4 +1,3 @@
-import { typeWithParameters } from '@angular/compiler/src/render3/util';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,7 +6,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { SnackbarService } from 'src/app/snackbar.service';
 import { CategoryComponent } from '../dialog/view-bill-products/category/category.component';
-
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 @Component({
   selector: 'app-manage-category',
   templateUrl: './manage-category.component.html',
@@ -20,17 +19,21 @@ export class ManageCategoryComponent implements OnInit {
   responseMessage:any;
 
   constructor(private categoryService:CategoryService,
+    private ngxService: NgxUiLoaderService,
     private dialog:MatDialog,
     private SnackbarService:SnackbarService,
     private router:Router) { }
 
   ngOnInit(): void {
+    this.ngxService.start();
     this.tableData();
   }
   tableData() {
     this.categoryService.getCategorys().subscribe((response:any)=>{
+      this.ngxService.stop();
       this.dataSource = new MatTableDataSource(response);
     },(error:any)=>{
+        this.ngxService.stop();
       console.log(error.error?.message);
       if(error.error?.message){
         this.responseMessage = error.error?.message;

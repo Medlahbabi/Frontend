@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import * as saveAs from 'file-saver';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { BillService } from 'src/app/services/bill.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { ProductService } from 'src/app/services/product.service';
@@ -31,14 +32,17 @@ export class ManageOrderComponent implements OnInit {
     private billService: BillService,
     private dialog: MatDialog,
     private SnackbarService: SnackbarService,
-    private router: Router) { }
+    private router: Router,
+    private ngxService:NgxUiLoaderService
+    ) { }
 
   ngOnInit(): void {
+    this.ngxService.start();
     this.getCategorys();
     this.manageOrderForm = this.formBulider.group({
       name: [null, [Validators.required, Validators.pattern(GlobalConstants.nameRegex)]],
       email: [null, [Validators.required, Validators.pattern(GlobalConstants.emailRegex)]],
-      contactNumber: [null, [Validators.required]],
+      contactNumber: [null, [Validators.required, Validators.pattern(GlobalConstants.contactNumberRegex)]],
       paymentMethod: [null, [Validators.required]],
       product: [null, [Validators.required]],
       category: [null, [Validators.required]],
@@ -50,9 +54,11 @@ export class ManageOrderComponent implements OnInit {
 
   getCategorys() {
     this.categoryService.getFilteredCategorys().subscribe((response: any) => {
+       this.ngxService.stop();
       this.categorys = response;
     }, (error: any) => {
-      console.log(error.error?.message);
+      this.ngxService.stop();
+      console.log(error);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -69,7 +75,7 @@ export class ManageOrderComponent implements OnInit {
       this.manageOrderForm.controls['quantity'].setValue('');
       this.manageOrderForm.controls['total'].setValue(0);
     },(error: any) => {
-      console.log(error.error?.message);
+      console.log(error);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -80,14 +86,13 @@ export class ManageOrderComponent implements OnInit {
   }
 
   getProductDetails(value: any) {
-    //console.log("inside getProductDetails");
     this.productService.getById(value.id).subscribe((response: any) => {
       this.price = response.price;
       this.manageOrderForm.controls['price'].setValue(response.price);
       this.manageOrderForm.controls['quantity'].setValue('1');
       this.manageOrderForm.controls['total'].setValue(this.price * 1);
     }, (error: any) => {
-      console.log(error.error?.message);
+      console.log(error);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -108,11 +113,8 @@ export class ManageOrderComponent implements OnInit {
   }
 
   validateProductAdd() {
-    var fromData = this.manageOrderForm.value;
-
-    //var totalValue = this.manageOrderForm.contols['total'].value;
-    var Value = this.manageOrderForm.controls['price'].value;
-    if ( Value === null || fromData?.product?.total === 0 || fromData?.product?.total === '' || fromData?.product?.quantity <= 0) {
+    if(this.manageOrderForm.controls['total'].value ===0  || this.manageOrderForm.controls['total'].value ===null || this.manageOrderForm.controls['quantity'].value<=0)
+  {
       return true;
     } else {
       return false;
@@ -121,9 +123,7 @@ export class ManageOrderComponent implements OnInit {
 
 
   validateSubmit() {
-    var formData = this.manageOrderForm.value;
-    if (this.totalAmount === 0 || formData.product.name === null || this.manageOrderForm.controls['email'].value === null ||
-    formData.contactNumber === null || formData.paymentMethod === null) {
+    if(this.totalAmount===0 || this.manageOrderForm.controls ['name'].value ===null || this.manageOrderForm.controls['email'].value ===null || this.manageOrderForm.controls['contactNumber'].value || this.manageOrderForm.controls['paymentMethod'].value ===null){
       return true;
     } else {
       return false;
@@ -137,7 +137,6 @@ export class ManageOrderComponent implements OnInit {
       this.totalAmount = this.totalAmount + fromData.total;
       this.dataSource.push({id:fromData.product.id , name:fromData.product.name , category:fromData.category.name, quantity:fromData.quantity, price:fromData.price,total:fromData.total});
       this.dataSource = [...this.dataSource];
-      //alert("Order Added Successfully");
       this.SnackbarService.openSnackBar(GlobalConstants.productAdded , "Success");
     }else{
       this.SnackbarService.openSnackBar(GlobalConstants.productExistError , GlobalConstants.error);
@@ -160,14 +159,14 @@ export class ManageOrderComponent implements OnInit {
       totalAmount : this.totalAmount.toString(),
       productDetails : JSON.stringify(this.dataSource)
     }
-
+    this.ngxService.start();
     this.billService.generateReport(data).subscribe((resonse:any)=>{
       this.downloadFile(resonse?.uuid);
       this.manageOrderForm.reset();
       this.dataSource = [];
       this.totalAmount = 0;
       },(error: any) => {
-        console.log(error.error?.message);
+        console.log(error);
         if (error.error?.message) {
           this.responseMessage = error.error?.message;
         } else {
@@ -182,6 +181,7 @@ export class ManageOrderComponent implements OnInit {
     }
     this.billService.getPdf(data).subscribe((resonse:any)=>{
         saveAs(resonse , fileName +".pdf");
+        this.ngxService.stop();
     })
   }
 }

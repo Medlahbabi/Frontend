@@ -25,7 +25,7 @@ export class ProductComponent implements OnInit {
     protected productService: ProductService,
     public dialogRef: MatDialogRef<ProductComponent>,
     private snackbarService: SnackbarService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
   ) { }
 
   ngOnInit(): void {
@@ -46,8 +46,8 @@ export class ProductComponent implements OnInit {
   getCategorys() {
     this.categoryService.getCategorys().subscribe((response: any) => {
       this.categorys = response;
-    }, (error) => {
-      console.error(error);
+    }, (error:any) => {
+      console.log(error);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -77,17 +77,14 @@ export class ProductComponent implements OnInit {
       this.dialogRef.close();
       this.onAddProduct.emit();
       this.responseMessage = response.message;
-      alert("Successfully Add Product");
       this.snackbarService.openSnackBar(this.responseMessage, "success");
     }, (error) => {
-      this.dialogRef.close();
-      console.error(error);
+      console.log(error);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
         this.responseMessage = GlobalConstants.genericError;
       }
-      alert(this.responseMessage + " " + GlobalConstants.error);
       this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     });
   }
@@ -104,17 +101,14 @@ export class ProductComponent implements OnInit {
       this.dialogRef.close();
       this.onEditProduct.emit();
       this.responseMessage = response.message;
-      alert("Successfully Update Product");
       this.snackbarService.openSnackBar(this.responseMessage, "success");
     }, (error) => {
-      this.dialogRef.close();
-      console.error(error);
+      console.log(error);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
         this.responseMessage = GlobalConstants.genericError;
       }
-      alert(this.responseMessage + " " + GlobalConstants.error);
       this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     });
   }

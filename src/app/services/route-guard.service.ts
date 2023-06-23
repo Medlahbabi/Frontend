@@ -13,7 +13,7 @@ export class RouteGuardService {
     private snackbarService:SnackbarService) { }
 
     canActivate(router:ActivatedRouteSnapshot):boolean{
-      let expectRoleArray = router.data;
+      let expectRoleArray = router.data[''];
       expectRoleArray = expectRoleArray.expectedRole;
 
       const token:any = localStorage.getItem('token');

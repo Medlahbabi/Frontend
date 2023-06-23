@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { GlobalConstants } from '../shared/global-constants';
 import { SnackbarService } from '../snackbar.service';
 import { UserService } from '../user.service';
-//import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-signup',
@@ -22,14 +22,14 @@ export class SignupComponent implements OnInit {
       private userService:UserService,
       private snackbarService:SnackbarService,
       public dialogRef:MatDialogRef<SignupComponent>,
-      //private ngxService:NgxUiLoaderService,
+      private ngxService:NgxUiLoaderService
     ) {}
 
   ngOnInit(): void {
     this.signupForm = this.formBuilder.group({
-      name:[null , [Validators.required]],
-      email:[null , Validators.required],
-      contactNumber:[null , [Validators.required]],
+      name:[null , [Validators.required,Validators.pattern(GlobalConstants.nameRegex)]],
+      email:[null , [Validators.required,Validators.pattern(GlobalConstants.emailRegex)]],
+      contactNumber:[null , [Validators.required,Validators.pattern(GlobalConstants.contactNumberRegex)]],
       password:[null , Validators.required],
       confirmPassword:[null , [Validators.required]]
     })
@@ -43,7 +43,7 @@ export class SignupComponent implements OnInit {
   }
 
   handleSubmit(){
-    //this.ngxService.start();
+    this.ngxService.start();
     var formDate = this.signupForm.value;
     var data = {
       name: formDate.name,
@@ -53,20 +53,18 @@ export class SignupComponent implements OnInit {
     }
 
     this.userService.signup(data).subscribe((response:any)=>{
-      //this.ngxService.stop();
+      this.ngxService.stop();
       this.dialogRef.close();
       this.responseMessage = response?.message;
       this.snackbarService.openSnackBar(this.responseMessage,"");
-      alert("Successfully Login");
-      this.router.navigate(['/cafe/login']);
+      this.router.navigate(['/']);
     },(error: { error: { message: any; }; })=>{
-      //this.ngxService.stop();
+      this.ngxService.stop();
       if(error.error?.message){
         this.responseMessage = error.error?.message;
       }else{
         this.responseMessage = GlobalConstants.genericError;
       }
-      alert(this.responseMessage +" " +GlobalConstants.error);
       this.snackbarService.openSnackBar(this.responseMessage , GlobalConstants.error);
     })
   }

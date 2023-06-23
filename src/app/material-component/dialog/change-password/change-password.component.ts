@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { SnackbarService } from 'src/app/snackbar.service';
 import { UserService } from 'src/app/user.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-change-password',
@@ -24,7 +26,8 @@ export class ChangePasswordComponent implements OnInit {
     private formBulider:FormBuilder,
     private userService:UserService,
     public dialogRef:MatDialogRef<ChangePasswordComponent>,
-    private snackbarService:SnackbarService
+    private snackbarService:SnackbarService,
+    private ngxService:NgxUiLoaderService
   ) { }
 
   ngOnInit(): void {
@@ -53,19 +56,20 @@ export class ChangePasswordComponent implements OnInit {
     }
 
     this.userService.changePassword(data).subscribe((response:any)=>{
+      this.ngxService.stop();
       this.responseMessage = response?.message;
       this.dialogRef.close();
-      alert("Successfully Login");
-      this.router.navigate(['/cafe/dashboard']);
+      this.router.navigate(['/restaurant/dashboard']);
       this.snackbarService.openSnackBar(this.responseMessage , "success");
     },(error)=>{
       console.log(error);
+      this.ngxService.stop();
       if(error.error?.message){
         this.responseMessage = error.error?.message;
       }else{
-        alert(this.responseMessage +" " +GlobalConstants.error);
-        this.snackbarService.openSnackBar(this.responseMessage , GlobalConstants.error);
+        this.responseMessage =GlobalConstants.genericError;
       }
+      this.snackbarService.openSnackBar(this.responseMessage , GlobalConstants.error);
     }
     );
   }

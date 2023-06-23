@@ -5,6 +5,8 @@ import { UserService } from 'src/app/user.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { GlobalConstants } from 'src/app/shared/global-constants';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+
 
 @Component({
   selector: 'app-manage-user',
@@ -17,19 +19,24 @@ export class ManageUserComponent implements OnInit {
   dataSource:any;
   responseMessage:any;
 
-  constructor(private userService:UserService,
+  constructor(
+   private ngxService:NgxUiLoaderService,
+    private userService:UserService,
     private dialog:MatDialog,
     private SnackbarService:SnackbarService,
     private router:Router) { }
 
   ngOnInit(): void {
+    this.ngxService.start();
     this.tableData();
   }
   tableData() {
     this.userService.getUsers().subscribe((response:any)=>{
+      this.ngxService.stop();
       this.dataSource = new MatTableDataSource(response);
     },(error:any)=>{
-      console.log(error.error?.message);
+      this.ngxService.stop();
+      console.log(error);
       if(error.error?.message){
         this.responseMessage = error.error?.message;
       }else{
@@ -44,20 +51,20 @@ export class ManageUserComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   onChange(status:any , id:any){
+    this.ngxService.start();
     var data = {
       status:status.toString(),
       id:id
     }
     this.userService.update(data).subscribe((response:any)=>{
+      this.ngxService.stop();
       this.responseMessage = response?.message;
       this.SnackbarService.openSnackBar(this.responseMessage , "success");
     },(error:any)=>{
-      //console.log(error.error?.message);
+      this.ngxService.stop();
       if(error.error?.message){
         this.responseMessage = error.error?.message;
       }else{
-        //alert("status is updated successfully");
-
         this.responseMessage = GlobalConstants.genericError;
       }
       this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);

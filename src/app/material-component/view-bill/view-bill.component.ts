@@ -6,8 +6,9 @@ import { saveAs } from 'file-saver';
 import { BillService } from 'src/app/services/bill.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { SnackbarService } from 'src/app/snackbar.service';
-import { ConfirmationComponent } from '../dialog/view-bill-products/confirmation/confirmation.component';
+import { ConfirmationComponent } from '../dialog/confirmation/confirmation.component';
 import { ViewBillProductsComponent } from '../dialog/view-bill-products/view-bill-products.component';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-view-bill',
@@ -21,18 +22,22 @@ export class ViewBillComponent implements OnInit {
   responseMessage: any;
 
   constructor(private billservice: BillService,
+    private ngxService:NgxUiLoaderService,
     private dialog: MatDialog,
     private SnackbarService: SnackbarService,
     private router: Router) { }
 
   ngOnInit(): void {
+    this.ngxService.start();
     this.tableData();
   }
   tableData() {
     this.billservice.getBills().subscribe((response: any) => {
+      this.ngxService.stop();
       this.dataSource = new MatTableDataSource(response);
     }, (error: any) => {
-      console.log(error.error?.message);
+      this.ngxService.stop();
+      console.log(error);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -60,24 +65,27 @@ export class ViewBillComponent implements OnInit {
 
   }
   handleDeleteAction(values: any) {
-    const dialogConfog = new MatDialogConfig;
+    const dialogConfog = new MatDialogConfig();
     dialogConfog.data = {
       message: 'delete ' + values.name + ' bill',
       confirmation: true
     };
     const dialogRef = this.dialog.open(ConfirmationComponent, dialogConfog);
     const sub = dialogRef.componentInstance.onEmistStatusChange.subscribe((response) => {
+      this.ngxService.start();
       this.deleteBill(values.id);
       dialogRef.close();
     })
   }
   deleteBill(id: any) {
     this.billservice.delete(id).subscribe((response: any)=>{
+      this.ngxService.stop();
       this.tableData();
       this.responseMessage = response?.message;
       this.SnackbarService.openSnackBar(this.responseMessage, "success");
     }, (error: any) => {
-      console.log(error.error?.message);
+      this.ngxService.stop();
+      console.log(error);
       if (error.error?.message) {
         this.responseMessage = error.error?.message;
       } else {
@@ -87,6 +95,7 @@ export class ViewBillComponent implements OnInit {
     })
   }
   downloadReportAction(values: any) {
+    this.ngxService.start();
     var data = {
       name: values.name,
       email: values.email,
@@ -102,6 +111,7 @@ export class ViewBillComponent implements OnInit {
 
     this.billservice.getPdf(data).subscribe((response: any) => {
       saveAs(response, fileName + '.pdf');
+      this.ngxService.stop();
     })
   }
 }

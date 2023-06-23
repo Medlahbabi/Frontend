@@ -18,8 +18,7 @@ export class CategoryComponent implements OnInit {
   categoryForm:any = FormGroup;
   dialogAction:any = "Add";
   action:any = "Add";
-
-responseMessage:any;
+  responseMessage:any;
 
   constructor(@Inject(MAT_DIALOG_DATA) public dialogData:any,
   private formBulider:FormBuilder,
@@ -55,7 +54,6 @@ responseMessage:any;
       this.dialogRef.close();
       this.onAddCategory.emit();
       this.responseMessage = response.message;
-      alert("Successfully Add Category");
       this.snackbarService.openSnackBar(this.responseMessage , "success");
     },(error)=>{
       this.dialogRef.close();
@@ -65,7 +63,6 @@ responseMessage:any;
       }else{
         this.responseMessage = GlobalConstants.genericError;
       }
-      alert(this.responseMessage +" " +GlobalConstants.error);
       this.snackbarService.openSnackBar(this.responseMessage , GlobalConstants.error);
     });
   }
@@ -79,7 +76,6 @@ responseMessage:any;
       this.dialogRef.close();
       this.onEditCatefory.emit();
       this.responseMessage = response.message;
-      alert("Successfully Update Category");
       this.snackbarService.openSnackBar(this.responseMessage , "success");
     },(error)=>{
       this.dialogRef.close();
@@ -89,7 +85,6 @@ responseMessage:any;
       }else{
         this.responseMessage = GlobalConstants.genericError;
       }
-      alert(this.responseMessage +" " +GlobalConstants.error);
       this.snackbarService.openSnackBar(this.responseMessage , GlobalConstants.error);
     });
   }

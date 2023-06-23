@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { GlobalConstants } from '../shared/global-constants';
 import { SnackbarService } from '../snackbar.service';
 import { UserService } from '../user.service';
-//import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-forgot-password',
@@ -22,6 +22,7 @@ export class ForgotPasswordComponent implements OnInit {
   constructor(private formBulider:FormBuilder,
     private userService:UserService ,
     public dialogRef:MatDialogRef<ForgotPasswordComponent> ,
+    public ngxService:NgxUiLoaderService,
     private snackbarService:SnackbarService) { }
 
   ngOnInit(): void {
@@ -31,18 +32,19 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   handleSubmit(){
+    this.ngxService.start();
     var formData = this.forgotPasswordForm.value;
     var data = {
       email:formData.email
     }
 
     this.userService.forgotPassword(data).subscribe((response:any)=>{
-      //this.ngxService.stop();
+      this.ngxService.stop();
       this.dialogRef.close();
       this.responseMessage = response?.message;
       this.snackbarService.openSnackBar(this.responseMessage,"");
     },(error: { error: { message: any; }; })=>{
-      //this.ngxService.stop();
+      this.ngxService.stop();
       if(error.error?.message){
         this.responseMessage = error.error?.message;
       }else{
