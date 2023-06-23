@@ -15,6 +15,8 @@ import { ThisReceiver } from '@angular/compiler';
 })
 export class ChangePasswordComponent implements OnInit {
 
+
+
   oldPassword = true;
   newPassword = true;
   confirmPassword = true;

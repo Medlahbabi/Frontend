@@ -6,6 +6,7 @@ import { SnackbarService } from 'src/app/snackbar.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 
+
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
