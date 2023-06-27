@@ -25,7 +25,6 @@ exports.config = {
     print: function() {}
   },
   onPrepare() {
-    // @ts-ignore
     require('ts-node').register({
       project: require('path').join(__dirname, './tsconfig.json')
     });

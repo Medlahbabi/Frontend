@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { SnackbarService } from 'src/app/snackbar.service';
 import { UserService } from 'src/app/user.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { ThisReceiver } from '@angular/compiler';
+
 
 @Component({
   selector: 'app-change-password',
@@ -24,7 +23,6 @@ export class ChangePasswordComponent implements OnInit {
   responseMessage:any;
 
   constructor(
-    private router:Router,
     private formBulider:FormBuilder,
     private userService:UserService,
     public dialogRef:MatDialogRef<ChangePasswordComponent>,
@@ -50,6 +48,7 @@ export class ChangePasswordComponent implements OnInit {
 
 
   handlePasswordChangeSubmit(){
+    this.ngxService.start();
     var formDate = this.changePasswordForm.value;
     var data = {
       oldPassword: formDate.oldPassword,
@@ -61,7 +60,6 @@ export class ChangePasswordComponent implements OnInit {
       this.ngxService.stop();
       this.responseMessage = response?.message;
       this.dialogRef.close();
-      this.router.navigate(['/restaurant/dashboard']);
       this.snackbarService.openSnackBar(this.responseMessage , "success");
     },(error)=>{
       console.log(error);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { SnackbarService } from '../snackbar.service';
 import { AuthService } from './auth.service';
 import jwt_decode from "jwt-decode";
@@ -12,8 +12,8 @@ export class RouteGuardService {
     public router:Router,
     private snackbarService:SnackbarService) { }
 
-    canActivate(router:ActivatedRouteSnapshot):boolean{
-      let expectRoleArray = router.data[''];
+    canActivate(route:ActivatedRouteSnapshot):boolean{
+      let expectRoleArray = route.data[''];
       expectRoleArray = expectRoleArray.expectedRole;
 
       const token:any = localStorage.getItem('token');
@@ -42,7 +42,7 @@ export class RouteGuardService {
         }
 
         this.snackbarService.openSnackBar(GlobalConstants.unauthroized , GlobalConstants.error);
-        this.router.navigate(['/cafe/dashboard']);
+        this.router.navigate(['/restaurant/dashboard']);
         return false;
       }
       else{

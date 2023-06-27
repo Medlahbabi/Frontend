@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import { UserService } from 'src/app/user.service';
 import { SnackbarService } from 'src/app/services/snackbar.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -22,9 +20,8 @@ export class ManageUserComponent implements OnInit {
   constructor(
    private ngxService:NgxUiLoaderService,
     private userService:UserService,
-    private dialog:MatDialog,
-    private SnackbarService:SnackbarService,
-    private router:Router) { }
+    private snackbarService:SnackbarService,
+  ) { }
 
   ngOnInit(): void {
     this.ngxService.start();
@@ -42,7 +39,7 @@ export class ManageUserComponent implements OnInit {
       }else{
         this.responseMessage = GlobalConstants.genericError;
       }
-      this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
 
@@ -59,7 +56,7 @@ export class ManageUserComponent implements OnInit {
     this.userService.update(data).subscribe((response:any)=>{
       this.ngxService.stop();
       this.responseMessage = response?.message;
-      this.SnackbarService.openSnackBar(this.responseMessage , "success");
+      this.snackbarService.openSnackBar(this.responseMessage , "success");
     },(error:any)=>{
       this.ngxService.stop();
       if(error.error?.message){
@@ -67,7 +64,7 @@ export class ManageUserComponent implements OnInit {
       }else{
         this.responseMessage = GlobalConstants.genericError;
       }
-      this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
 

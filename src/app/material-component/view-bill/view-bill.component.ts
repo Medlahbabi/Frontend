@@ -24,7 +24,7 @@ export class ViewBillComponent implements OnInit {
   constructor(private billservice: BillService,
     private ngxService:NgxUiLoaderService,
     private dialog: MatDialog,
-    private SnackbarService: SnackbarService,
+    private snackbarService: SnackbarService,
     private router: Router) { }
 
   ngOnInit(): void {
@@ -43,7 +43,7 @@ export class ViewBillComponent implements OnInit {
       } else {
         this.responseMessage = GlobalConstants.genericError;
       }
-      this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
 
@@ -82,7 +82,7 @@ export class ViewBillComponent implements OnInit {
       this.ngxService.stop();
       this.tableData();
       this.responseMessage = response?.message;
-      this.SnackbarService.openSnackBar(this.responseMessage, "success");
+      this.snackbarService.openSnackBar(this.responseMessage, "success");
     }, (error: any) => {
       this.ngxService.stop();
       console.log(error);
@@ -91,7 +91,7 @@ export class ViewBillComponent implements OnInit {
       } else {
         this.responseMessage = GlobalConstants.genericError;
       }
-      this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
   downloadReportAction(values: any) {

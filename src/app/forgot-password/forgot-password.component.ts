@@ -43,7 +43,7 @@ export class ForgotPasswordComponent implements OnInit {
       this.dialogRef.close();
       this.responseMessage = response?.message;
       this.snackbarService.openSnackBar(this.responseMessage,"");
-    },(error: { error: { message: any; }; })=>{
+    },(error)=>{
       this.ngxService.stop();
       if(error.error?.message){
         this.responseMessage = error.error?.message;
@@ -52,7 +52,5 @@ export class ForgotPasswordComponent implements OnInit {
       }
       this.snackbarService.openSnackBar(this.responseMessage , GlobalConstants.error);
     })
-    this.registerSucess=true;
-    this.isButtonVisible = false;
   }
 }

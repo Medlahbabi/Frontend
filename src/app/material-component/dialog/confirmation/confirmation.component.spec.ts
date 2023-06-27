@@ -24,3 +24,4 @@ describe('ConfirmationComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+

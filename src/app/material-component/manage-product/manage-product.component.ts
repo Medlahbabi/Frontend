@@ -18,13 +18,13 @@ export class ManageProductComponent implements OnInit {
 
   displayedColumns: string[] = ['name' , 'categoryName' , 'description' , 'price' , 'edit'];
   dataSource:any;
-  length1:any;
+  //length1:any;
   responseMessage:any;
 
   constructor(private productService:ProductService,
    private ngxService:NgxUiLoaderService,
     private dialog:MatDialog,
-    private SnackbarService:SnackbarService,
+    private snackbarService:SnackbarService,
     private router:Router) { }
 
   ngOnInit(): void {
@@ -43,7 +43,7 @@ export class ManageProductComponent implements OnInit {
       }else{
         this.responseMessage = GlobalConstants.genericError;
       }
-      this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
 
@@ -101,7 +101,7 @@ export class ManageProductComponent implements OnInit {
      this.ngxService.stop();
       this.tableData();
       this.responseMessage = response?.message;
-      this.SnackbarService.openSnackBar(this.responseMessage , "success");
+      this.snackbarService.openSnackBar(this.responseMessage , "success");
     },(error:any)=>{
       this.ngxService.stop();
       console.log(error);
@@ -110,7 +110,7 @@ export class ManageProductComponent implements OnInit {
       }else{
         this.responseMessage = GlobalConstants.genericError;
       }
-      this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
 
@@ -123,7 +123,7 @@ export class ManageProductComponent implements OnInit {
     this.productService.updateStatus(data).subscribe((response:any)=>{
       this.responseMessage = response?.message;
       this.ngxService.stop();
-      this.SnackbarService.openSnackBar(this.responseMessage , "success");
+      this.snackbarService.openSnackBar(this.responseMessage , "success");
     },(error:any)=>{
       this.ngxService.stop();
       console.log(error);
@@ -132,7 +132,7 @@ export class ManageProductComponent implements OnInit {
       }else{
         this.responseMessage = GlobalConstants.genericError;
       }
-      this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
 }

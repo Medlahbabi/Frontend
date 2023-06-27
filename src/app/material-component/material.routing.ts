@@ -15,7 +15,7 @@ export const MaterialRoutes: Routes = [
         component:ManageCategoryComponent,
         canActivate:[RouteGuardService],
         data:{
-            expectedRole: ['admin' , 'user']
+            expectedRole: ['admin']
         }
     },
 

@@ -12,6 +12,7 @@
 <mat-dialog-content class="mat-typography">
     <form [formGroup]="categoryForm">
         <div fxFlex fxLayout="column">
+            <div fxLayout="row wrap">
             <mat-form-field appearance="standard" fxFlex>
                 <mat-label>Name</mat-label>
                 <input matInput formControlName="name" required>
@@ -19,6 +20,7 @@
                     <span *ngIf="categoryForm.controls.name.errors.required">This field is mandatory.</span>
                 </mat-error>
             </mat-form-field>
+        </div>
         </div>
     </form>
 </mat-dialog-content>

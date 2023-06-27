@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
       private userService:UserService,
       private snackbarService:SnackbarService,
       public dialogRef:MatDialogRef<LoginComponent>,
-     private ngxService:NgxUiLoaderService,
+     private ngxService:NgxUiLoaderService
     ) {}
 
   ngOnInit(): void {
@@ -46,8 +46,7 @@ export class LoginComponent implements OnInit {
       this.dialogRef.close();
       localStorage.setItem('token' , response.token);
       this.router.navigate(['/restaurant/dashboard']);
-    },(error: { error: { message: any; }; })=>{
-      this.ngxService.stop();
+    },(error)=>{
       if(error.error?.message){
         this.responseMessage = error.error?.message;
       }else{

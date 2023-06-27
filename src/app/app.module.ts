@@ -33,7 +33,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig={
   textColor:"#FFFFFF",
   textPosition: "center-center",
   fgsColor: "#7b1fa2",
-  fgsType:SPINNER.doubleBounce,
+  fgsType:SPINNER.squareJellyBox,
   fgsSize:100,
   hasProgressBar:false
 

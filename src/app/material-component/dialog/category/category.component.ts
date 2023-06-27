@@ -15,7 +15,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 export class CategoryComponent implements OnInit {
 
   onAddCategory = new EventEmitter();
-  onEditCatefory = new EventEmitter();
+  onEditCategory = new EventEmitter();
   categoryForm:any = FormGroup;
   dialogAction:any = "Add";
   action:any = "Add";
@@ -75,7 +75,7 @@ export class CategoryComponent implements OnInit {
     }
     this.categoryService.update(data).subscribe((response:any)=>{
       this.dialogRef.close();
-      this.onEditCatefory.emit();
+      this.onEditCategory.emit();
       this.responseMessage = response.message;
       this.snackbarService.openSnackBar(this.responseMessage , "success");
     },(error)=>{

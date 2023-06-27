@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import * as saveAs from 'file-saver';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { BillService } from 'src/app/services/bill.service';
@@ -30,9 +28,7 @@ export class ManageOrderComponent implements OnInit {
     private categoryService: CategoryService,
     private productService: ProductService,
     private billService: BillService,
-    private dialog: MatDialog,
-    private SnackbarService: SnackbarService,
-    private router: Router,
+    private snackbarService: SnackbarService,
     private ngxService:NgxUiLoaderService
     ) { }
 
@@ -64,7 +60,7 @@ export class ManageOrderComponent implements OnInit {
       } else {
         this.responseMessage = GlobalConstants.genericError;
       }
-      this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
 
@@ -81,7 +77,7 @@ export class ManageOrderComponent implements OnInit {
       } else {
         this.responseMessage = GlobalConstants.genericError;
       }
-      this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
 
@@ -98,7 +94,7 @@ export class ManageOrderComponent implements OnInit {
       } else {
         this.responseMessage = GlobalConstants.genericError;
       }
-      this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
     })
   }
 
@@ -123,7 +119,7 @@ export class ManageOrderComponent implements OnInit {
 
 
   validateSubmit() {
-    if(this.totalAmount===0 || this.manageOrderForm.controls ['name'].value ===null || this.manageOrderForm.controls['email'].value ===null || this.manageOrderForm.controls['contactNumber'].value || this.manageOrderForm.controls['paymentMethod'].value ===null){
+    if(this.totalAmount===0 || this.manageOrderForm.controls ['name'].value ===null || this.manageOrderForm.controls['email'].value ===null || this.manageOrderForm.controls['contactNumber'].value ===null  || this.manageOrderForm.controls['paymentMethod'].value ===null){
       return true;
     } else {
       return false;
@@ -137,9 +133,9 @@ export class ManageOrderComponent implements OnInit {
       this.totalAmount = this.totalAmount + fromData.total;
       this.dataSource.push({id:fromData.product.id , name:fromData.product.name , category:fromData.category.name, quantity:fromData.quantity, price:fromData.price,total:fromData.total});
       this.dataSource = [...this.dataSource];
-      this.SnackbarService.openSnackBar(GlobalConstants.productAdded , "Success");
+      this.snackbarService.openSnackBar(GlobalConstants.productAdded , "Success");
     }else{
-      this.SnackbarService.openSnackBar(GlobalConstants.productExistError , GlobalConstants.error);
+      this.snackbarService.openSnackBar(GlobalConstants.productExistError , GlobalConstants.error);
     }
   }
 
@@ -172,7 +168,7 @@ export class ManageOrderComponent implements OnInit {
         } else {
           this.responseMessage = GlobalConstants.genericError;
         }
-        this.SnackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+        this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
       })
   }
   downloadFile(fileName:string) {
